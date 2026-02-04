@@ -27,6 +27,12 @@ async function main() {
   // Create tools array with Calculator
   const tools = [new Calculator()];
 
+  // Create agent executor
+  const executor = await initializeAgentExecutorWithOptions(tools, client, {
+    agentType: "openai-functions",
+    verbose: true,
+  });
+
   const response = await client.chat.completions.create({
     messages: [
       { role: "system", content: "" },

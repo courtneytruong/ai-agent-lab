@@ -35,6 +35,14 @@ async function main() {
       description: "Returns the current date and time as a string.",
       func: async () => new Date().toString(),
     }),
+    new DynamicTool({
+      name: "reverse_string",
+      description: "Reverses a string. Input should be a single string.",
+      func: async (input) => {
+        if (typeof input !== "string") return "Input must be a string.";
+        return input.split("").reverse().join("");
+      },
+    }),
   ];
 
   // Create agent using LangChain's createAgent
@@ -44,34 +52,33 @@ async function main() {
     tools,
   });
 
-  // Test queries using agent
-  try {
-    // Math query
-    const mathResult = await agent.invoke({
-      messages: [{ role: "user", content: "What is 25 * 4 + 10?" }],
-    });
-    // Print only the final AIMessage content
-    const mathMessages = mathResult.messages || [];
-    const finalMathMessage = mathMessages
-      .reverse()
-      .find((m) => m.constructor?.name === "AIMessage" && m.content);
-    if (finalMathMessage) {
-      console.log(finalMathMessage.content);
-    }
+  // Array of test queries
+  const testQueries = [
+    "What time is it right now?",
+    "What is 25 * 4 + 10?",
+    "Reverse the string 'Hello World'",
+  ];
 
-    // Time query
-    const timeResult = await agent.invoke({
-      messages: [{ role: "user", content: "What time is it right now?" }],
-    });
-    const timeMessages = timeResult.messages || [];
-    const finalTimeMessage = timeMessages
-      .reverse()
-      .find((m) => m.constructor?.name === "AIMessage" && m.content);
-    if (finalTimeMessage) {
-      console.log(finalTimeMessage.content);
+  for (const query of testQueries) {
+    console.log("\n==============================");
+    console.log(`Query: ${query}`);
+    try {
+      const result = await agent.invoke({
+        messages: [{ role: "user", content: query }],
+      });
+      const messages = result.messages || [];
+      const finalMessage = messages
+        .reverse()
+        .find((m) => m.constructor?.name === "AIMessage" && m.content);
+      if (finalMessage) {
+        console.log("Result:", finalMessage.content);
+      } else {
+        console.log("No result returned by agent.");
+      }
+    } catch (err) {
+      console.error("Error for query:", query, err);
     }
-  } catch (err) {
-    console.error("Agent encountered an error:", err);
+    console.log("==============================\n");
   }
 }
 

@@ -45,11 +45,19 @@ async function main() {
     }),
   ];
 
+  // System message to instruct the AI
+  const systemMessage = {
+    role: "system",
+    content:
+      "You are a professional and succinct AI assistant. Always answer clearly and concisely.",
+  };
+
   // Create agent using LangChain's createAgent
   const { createAgent } = await import("langchain");
   const agent = createAgent({
     model: chatModel,
     tools,
+    systemMessage,
   });
 
   // Array of test queries
@@ -65,7 +73,7 @@ async function main() {
     console.log(`Query: ${query}`);
     try {
       const result = await agent.invoke({
-        messages: [{ role: "user", content: query }],
+        messages: [systemMessage, { role: "user", content: query }],
       });
       const messages = result.messages || [];
       const finalMessage = messages

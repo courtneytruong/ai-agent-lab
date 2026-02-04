@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { ChatOpenAI } from "@langchain/openai";
 dotenv.config();
 
 async function main() {
@@ -12,7 +13,15 @@ async function main() {
     process.exit(1);
   }
   console.log("✅ GITHUB_TOKEN found! Ready to proceed.");
-  // Your code will go here
+  // Create ChatOpenAI instance
+  const chat = new ChatOpenAI({
+    model: "openai/gpt-4o",
+    temperature: 0,
+    baseURL: "https://models.github.ai/inference",
+    apiKey: process.env.GITHUB_TOKEN,
+  });
+
+  console.log("🤖 ChatOpenAI instance created and ready.");
 }
 
 main().catch(console.error);

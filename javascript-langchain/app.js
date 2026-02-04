@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
-import { ChatOpenAI } from "@langchain/openai";
+import { initializeAgentExecutorWithOptions } from "langchain/agents";
+import { Calculator } from "@langchain/community/tools/calculator";
+import { DynamicTool } from "@langchain/core/tools";
 dotenv.config();
 
 async function main() {

@@ -16,7 +16,7 @@ async function main() {
   }
   console.log("✅ GITHUB_TOKEN found! Ready to proceed.");
   // Create tools array with Calculator
-  const tools = [new Calculator()];
+  // const tools = [new Calculator()];
 
   // Create OpenAI client for GitHub Models
   const token = process.env["GITHUB_TOKEN"];
@@ -27,7 +27,7 @@ async function main() {
   });
 
   // Test query using OpenAI client (GitHub model)
-  const testQuery = "What is 25 * 4 + 10?";
+  const testQuery = "What time is it right now?";
   try {
     const response = await client.chat.completions.create({
       messages: [

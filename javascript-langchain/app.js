@@ -15,8 +15,15 @@ async function main() {
     process.exit(1);
   }
   console.log("✅ GITHUB_TOKEN found! Ready to proceed.");
-  // Create tools array with Calculator
-  // const tools = [new Calculator()];
+  // Create tools array with Calculator and DynamicTool for current time
+  const tools = [
+    // new Calculator(),
+    new DynamicTool({
+      name: "get_current_time",
+      description: "Returns the current date and time as a string.",
+      func: async () => new Date().toString(),
+    }),
+  ];
 
   // Create OpenAI client for GitHub Models
   const token = process.env["GITHUB_TOKEN"];

@@ -59,8 +59,9 @@ async function main() {
     "Reverse the string 'Hello World'",
   ];
 
+  console.log("\nRunning example queries:\n");
   for (const query of testQueries) {
-    console.log("\n==============================");
+    console.log("\n" + "─".repeat(50));
     console.log(`Query: ${query}`);
     try {
       const result = await agent.invoke({
@@ -71,15 +72,16 @@ async function main() {
         .reverse()
         .find((m) => m.constructor?.name === "AIMessage" && m.content);
       if (finalMessage) {
-        console.log("Result:", finalMessage.content);
+        console.log("✅ Result:", finalMessage.content);
       } else {
-        console.log("No result returned by agent.");
+        console.log("❌ No result returned by agent.");
       }
     } catch (err) {
-      console.error("Error for query:", query, err);
+      console.error("❌ Error for query:", query, err);
     }
-    console.log("==============================\n");
+    console.log("─".repeat(50) + "\n");
   }
+  console.log("All example queries completed.\n");
 }
 
 main().catch((err) => {

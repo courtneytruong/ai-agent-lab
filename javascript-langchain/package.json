@@ -1,0 +1,18 @@
+{
+  "name": "javascript-langchain",
+  "version": "1.0.0",
+  "description": "AI Agent using LangChain and GitHub Models",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "langchain",
+    "ai-agent",
+    "github",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC"
+}

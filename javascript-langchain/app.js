@@ -24,6 +24,9 @@ async function main() {
     apiKey: token,
   });
 
+  // Create tools array with Calculator
+  const tools = [new Calculator()];
+
   const response = await client.chat.completions.create({
     messages: [
       { role: "system", content: "" },

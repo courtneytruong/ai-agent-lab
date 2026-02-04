@@ -13,15 +13,29 @@ async function main() {
     process.exit(1);
   }
   console.log("✅ GITHUB_TOKEN found! Ready to proceed.");
-  // Create ChatOpenAI instance
-  const chat = new ChatOpenAI({
-    model: "openai/gpt-4o",
-    temperature: 0,
+  // Use OpenAI client for GitHub Models
+  const OpenAI = (await import("openai")).default;
+  const token = process.env["GITHUB_TOKEN"];
+
+  const client = new OpenAI({
     baseURL: "https://models.github.ai/inference",
-    apiKey: process.env.GITHUB_TOKEN,
+    apiKey: token,
   });
 
-  console.log("🤖 ChatOpenAI instance created and ready.");
+  const response = await client.chat.completions.create({
+    messages: [
+      { role: "system", content: "" },
+      { role: "user", content: "What is 25 * 4 + 10?" },
+    ],
+    model: "openai/gpt-4o",
+    temperature: 0,
+    max_tokens: 4096,
+    top_p: 1,
+  });
+
+  console.log("📝 AI Response:", response.choices[0].message.content);
 }
 
-main().catch(console.error);
+main().catch((err) => {
+  console.error("The sample encountered an error:", err);
+});

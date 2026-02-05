@@ -43,13 +43,35 @@ async function main() {
         return input.split("").reverse().join("");
       },
     }),
+    new DynamicTool({
+      name: "get_weather",
+      description:
+        "Returns the weather for a given date. Accepts a date parameter formatted as 'yyyy-MM-dd'. Returns 'Sunny, 72°F' if the date matches today's date, otherwise returns 'Rainy, 55°F'. Always use get_current_time to determine today's date before calling this tool. The agent should first call get_current_time to get today's date, then call get_weather with that date, and finally return a complete answer combining both pieces of information.",
+      func: async (input) => {
+        // input should be a string in 'yyyy-MM-dd' format
+        if (typeof input !== "string") {
+          return "Input must be a date string in 'yyyy-MM-dd' format.";
+        }
+        // Get today's date in yyyy-MM-dd format
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+        const todayStr = `${yyyy}-${mm}-${dd}`;
+        if (input === todayStr) {
+          return `Sunny, 72°F`;
+        } else {
+          return `Rainy, 55°F`;
+        }
+      },
+    }),
   ];
 
   // System message to instruct the AI
   const systemMessage = {
     role: "system",
     content:
-      "You are a professional and succinct AI assistant. Always answer clearly and concisely.",
+      "You are a professional and succinct AI assistant. Always answer clearly and concisely.\n\nFor weather queries, always first call the get_current_time tool to get today's date (in string format), then call get_weather with that date (formatted as yyyy-MM-dd), and return a complete answer that combines both the date and the weather result.",
   };
 
   // Create agent using LangChain's createAgent
@@ -65,6 +87,7 @@ async function main() {
     "What time is it right now?",
     "What is 25 * 4 + 10?",
     "Reverse the string 'Hello World'",
+    "What's the weather like today?",
   ];
 
   console.log("\nRunning example queries:\n");
